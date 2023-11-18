@@ -9,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,6 +41,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  final List<String> types = ['Restaurant', 'Hotel', 'Taxi'];
+  final List<String> countries = ['Canada', 'USA', 'China'];
+  String selectedType = 'Restaurant';
+  String selectedCountry = 'Canada';
   double tipAmount = 0.0;
   double billAmount = 0.0;
   double tipPercentage = 0.15;
@@ -65,26 +69,48 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-        appBar: AppBar(
-          // TRY THIS: Try changing the color here to a specific color (to
-          // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-          // change color while the other colors stay the same.
-          // no colour
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
-        body: Column(
-          children: <Widget>[
-            SizedBox(
+
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        title: Text(widget.title),
+      ),
+      body: Column(
+          children: [
+             SizedBox(
               height: 30,
+            ),
+            DropdownButton<String>(
+              value: selectedType,
+              onChanged: (String? newType) {
+                if (newType != null) {
+                  setState(() {
+                    selectedType = newType;
+                  });
+                }
+              },
+              items: types.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
+            DropdownButton<String>(
+              value: selectedCountry,
+              onChanged: (String? newCountry) {
+                if (newCountry != null) {
+                  setState(() {
+                    selectedCountry = newCountry;
+                  });
+                }
+              },
+              items: countries.map((String country) {
+                return DropdownMenuItem<String>(
+                  value: country,
+                  child: Text(country),
+                );
+              }).toList(),
             ),
             CurrencyInputField(
               onChanged: (input) {
@@ -96,39 +122,34 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
             ), // currency input widget
-            TipAmount(tipAmount: tipAmount),
-          ],
-
-          // Center(
-          //     // Center is a layout widget. It takes a single child and positions it
-          //     // in the middle of the parent.
-          //     child: CurrencyInputField()
-
-          //     // Column(
-          //     //   // Column is also a layout widget. It takes a list of children and
-          //     //   // arranges them vertically. By default, it sizes itself to fit its
-          //     //   // children horizontally, and tries to be as tall as its parent.
-          //     //   //
-          //     //   // Column has various properties to control how it sizes itself and
-          //     //   // how it positions its children. Here we use mainAxisAlignment to
-          //     //   // center the children vertically; the main axis here is the vertical
-          //     //   // axis because Columns are vertical (the cross axis would be
-          //     //   // horizontal).
-          //     //   //
-          //     //   // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          //     //   // action in the IDE, or press "p" in the console), to see the
-          //     //   // wireframe for each widget.
-          //     //   mainAxisAlignment: MainAxisAlignment.center,
-          //     //   children: <Widget>[
-          //     //     const Text(
-          //     //       'You have pushed the button this many times:',
-          //     //     ),
-          //     //     Text(
-          //     //       '$_counter',
-          //     //       style: Theme.of(context).textTheme.headlineMedium,
+            TipAmount(tipAmount: tipAmount)
+          ]
+          // Column(
+          //   // Column is also a layout widget. It takes a list of children and
+          //   // arranges them vertically. By default, it sizes itself to fit its
+          //   // children horizontally, and tries to be as tall as its parent.
+          //   //
+          //   // Column has various properties to control how it sizes itself and
+          //   // how it positions its children. Here we use mainAxisAlignment to
+          //   // center the children vertically; the main axis here is the vertical
+          //   // axis because Columns are vertical (the cross axis would be
+          //   // horizontal).
+          //   //
+          //   // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          //   // action in the IDE, or press "p" in the console), to see the
+          //   // wireframe for each widget.
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: <Widget>[
+          //     const Text(
+          //       'You have pushed the button this many times:',
+          //     ),
+          //     Text(
+          //       '$_counter',
+          //       style: Theme.of(context).textTheme.headlineMedium,
           //     //     ),
           //     //   ],
           //     // ),
+
           //     ),
         ));
   }
@@ -150,7 +171,7 @@ class CurrencyInputField extends StatelessWidget {
       onChanged: onChanged, // Pass the onChanged callback to the TextField
       decoration: InputDecoration(
         labelText: 'Amount',
-        hintText: 'Enter amount (e.g., 20.15)',
+        hintText: 'Enter amount',
         border: OutlineInputBorder(),
       ),
     );
@@ -174,3 +195,4 @@ class TipAmount extends StatelessWidget {
     );
   }
 }
+

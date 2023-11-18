@@ -9,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,42 +41,54 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<String> types = ['Restaurant', 'Hotel', 'Taxi'];
+  final List<String> countries = ['Canada', 'USA', 'China'];
+  String selectedType = 'Restaurant';
+  String selectedCountry = 'Canada';
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Colors.blue,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        backgroundColor: Colors.amber,
         title: Text(widget.title),
       ),
-      body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: CurrencyInputField()
-
+      body: Column(
+          children: [
+            CurrencyInputField(),
+            DropdownButton<String>(
+              value: selectedType,
+              onChanged: (String? newType) {
+                if (newType != null) {
+                  setState(() {
+                    selectedType = newType;
+                  });
+                }
+              },
+              items: types.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
+            DropdownButton<String>(
+              value: selectedCountry,
+              onChanged: (String? newCountry) {
+                if (newCountry != null) {
+                  setState(() {
+                    selectedCountry = newCountry;
+                  });
+                }
+              },
+              items: countries.map((String country) {
+                return DropdownMenuItem<String>(
+                  value: country,
+                  child: Text(country),
+                );
+              }).toList(),
+            )
+          ]
           // Column(
           //   // Column is also a layout widget. It takes a list of children and
           //   // arranges them vertically. By default, it sizes itself to fit its
@@ -119,7 +130,7 @@ class CurrencyInputField extends StatelessWidget {
       ],
       decoration: InputDecoration(
         labelText: 'Amount',
-        hintText: 'Enter amount (e.g., 20.15)',
+        hintText: 'Enter amount',
         border: OutlineInputBorder(),
       ),
     );

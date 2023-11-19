@@ -17,4 +17,4 @@ Our project aimed to simplify the tipping process for restaurant-goers abroad by
 
 ## Demo
 
-[Devpost](https://devpost.com/software/tipmate-app?ref_content=user-portfolio&ref_feature=in_progress)
+Check out our Devpost: [Devpost](https://devpost.com/software/tipmate-app?ref_content=user-portfolio&ref_feature=in_progress)!

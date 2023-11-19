@@ -122,6 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
               if (newCountry != null) {
                 setState(() {
                   selectedCountry = newCountry;
+                  tipPercentage = tipMap[newCountry]!;
+                  _updateTipAmount();
                 });
               }
             },

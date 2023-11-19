@@ -2,7 +2,7 @@
 
 Map<String, double> tipMap = {
   'Canada': 0.15,
-  'USA': 0.20,
+  'United States': 0.20,
   'China': 0.00,
   'Belize': 0.15,
   'Mexico': 0.15,

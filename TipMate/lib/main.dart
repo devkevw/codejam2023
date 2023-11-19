@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TipMate App',
+      title: 'TipMate',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black12),
         useMaterial3: true,
@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double tipAmount = 0.0;
   double billAmount = 0.0;
   double tipPercentage = 0.15;
+  double totalAmount = 0.0;
 
   //adding mapping
   Map<String, double> tipMap = {
@@ -59,6 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void _updateTipAmount() {
     setState(() {
       tipAmount = billAmount * tipPercentage;
+    });
+  }
+
+    void _updateTotalAmount() {
+    setState(() {
+      totalAmount = billAmount + tipAmount;
     });
   }
 
@@ -86,54 +93,41 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.amber,
           title: Text(widget.title),
         ),
-        body: Column(children: [
-          SizedBox(
-            height: 30,
-          ),
-          CurrencyInputField(
-            onChanged: (input) {
-              // This callback is called when the user enters or modifies the text
-              // Convert the input text to a double and update the bill amount
-              setState(() {
-                billAmount = double.tryParse(input) ?? 0.0;
-                _updateTipAmount();
-              });
-            },
-          ),
-          // DropdownButton<String>(
-          //   value: selectedType,
-          //   onChanged: (String? newType) {
-          //     if (newType != null) {
-          //       setState(() {
-          //         selectedType = newType;
-          //       });
-          //     }
-          //   },
-          //   items: types.map((String item) {
-          //     return DropdownMenuItem<String>(
-          //       value: item,
-          //       child: Text(item),
-          //     );
-          //   }).toList(),
-          // ),
-          DropdownButton<String>(
-            value: selectedCountry,
-            onChanged: (String? newCountry) {
-              if (newCountry != null) {
-                setState(() {
-                  selectedCountry = newCountry;
-                });
-              }
-            },
-            items: countries.map((String country) {
-              return DropdownMenuItem<String>(
-                value: country,
-                child: Text(country),
-              );
-            }).toList(),
-          ),
-          TipAmount(tipAmount: tipAmount)
-        ]
+        body: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(40),
+              child: CurrencyInputField(
+                onChanged: (input) {
+                  // This callback is called when the user enters or modifies the text
+                  // Convert the input text to a double and update the bill amount
+                  setState(() {
+                    billAmount = double.tryParse(input) ?? 0.0;
+                    _updateTipAmount();
+                    _updateTotalAmount();
+                  });
+                },
+              )
+            ),
+            DropdownButton<String>(
+              value: selectedCountry,
+              onChanged: (String? newCountry) {
+                if (newCountry != null) {
+                  setState(() {
+                    selectedCountry = newCountry;
+                  });
+                }
+              },
+              items: countries.map((String country) {
+                return DropdownMenuItem<String>(
+                  value: country,
+                  child: Text(country),
+                );
+              }).toList(),
+            ),
+            TipAmount(tipAmount: tipAmount),
+            TotalAmount(totalAmount: totalAmount)
+          ]
             // Column(
             //   // Column is also a layout widget. It takes a list of children and
             //   // arranges them vertically. By default, it sizes itself to fit its
@@ -181,8 +175,8 @@ class CurrencyInputField extends StatelessWidget {
       onChanged: onChanged, // Pass the onChanged callback to the TextField
       decoration: InputDecoration(
         labelText: 'Amount',
-        hintText: 'Enter amount',
-        border: OutlineInputBorder(),
+        hintText: '0.00',
+        border: UnderlineInputBorder(),
       ),
     );
   }
@@ -203,5 +197,20 @@ class TipAmount extends StatelessWidget {
         style: TextStyle(fontSize: 18.0),
       ),
     );
+  }
+}
+
+class TotalAmount extends StatelessWidget {
+  final double totalAmount;
+
+  TotalAmount({required this.totalAmount});
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      Text(
+        'Total Amount: ${totalAmount.toStringAsFixed(2)}',
+        style: TextStyle(fontSize: 18.0),
+      ),
   }
 }

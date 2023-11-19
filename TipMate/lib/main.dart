@@ -41,19 +41,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> types = ['Restaurant', 'Hotel', 'Taxi'];
+  //final List<String> types = ['Restaurant', 'Hotel', 'Taxi'];
   final List<String> countries = ['Canada', 'USA', 'China'];
-  String selectedType = 'Restaurant';
+  //String selectedType = 'Restaurant';
   String selectedCountry = 'Canada';
   double tipAmount = 0.0;
   double billAmount = 0.0;
   double tipPercentage = 0.15;
+
+  //adding mapping
+  Map<String, double> tipMap = {
+    'Canada': 0.15,
+    'USA': 0.20,
+    'China': 0.00,
+  };
 
   void _updateTipAmount() {
     setState(() {
       tipAmount = billAmount * tipPercentage;
     });
   }
+
+  // void _updateTipPercentage() {
+  //   setState(() {
+  //     tipPercentage = ??;
+  //   });
+  // }
 
 //   void _incrementCounter() {
 //     setState(() {
@@ -87,22 +100,22 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
           ),
-          DropdownButton<String>(
-            value: selectedType,
-            onChanged: (String? newType) {
-              if (newType != null) {
-                setState(() {
-                  selectedType = newType;
-                });
-              }
-            },
-            items: types.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
-          ),
+          // DropdownButton<String>(
+          //   value: selectedType,
+          //   onChanged: (String? newType) {
+          //     if (newType != null) {
+          //       setState(() {
+          //         selectedType = newType;
+          //       });
+          //     }
+          //   },
+          //   items: types.map((String item) {
+          //     return DropdownMenuItem<String>(
+          //       value: item,
+          //       child: Text(item),
+          //     );
+          //   }).toList(),
+          // ),
           DropdownButton<String>(
             value: selectedCountry,
             onChanged: (String? newCountry) {

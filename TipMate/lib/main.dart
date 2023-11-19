@@ -1,10 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'tips.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+// // Check if location services are enabled
+//   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//   if (!serviceEnabled) {
+//     print("Location services are disabled. Please enable services.");
+//     return;
+//   }
+
+//   // Check and request location permissions
+//   LocationPermission permission = await Geolocator.checkPermission();
+//   if (permission == LocationPermission.denied) {
+//     permission = await Geolocator.requestPermission();
+//     if (permission == LocationPermission.denied) {
+//       // Handle the case where the user denied location permission
+//       print("Location permissions are denied. Exiting the app.");
+//       return;
+//     }
+//   }
+
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,16 +49,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -41,43 +56,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //final List<String> types = ['Restaurant', 'Hotel', 'Taxi'];
   final List<String> countries = tipMap.keys.toList();
-  //String selectedType = 'Restaurant';
   String selectedCountry = 'Canada';
   double tipAmount = 0.0;
   double billAmount = 0.0;
   double tipPercentage = 0.15;
-
-  //adding mapping
-  // Map<String, double> tipMap = {
-  //   'Canada': 0.15,
-  //   'USA': 0.20,
-  //   'China': 0.00,
-  // };
 
   void _updateTipAmount() {
     setState(() {
       tipAmount = billAmount * tipPercentage;
     });
   }
-
-  // void _updateTipPercentage() {
-  //   setState(() {
-  //     tipPercentage = ??;
-  //   });
-  // }
-
-//   void _incrementCounter() {
-//     setState(() {
-//       // This call to setState tells the Flutter framework that something has
-//       // changed in this State, which causes it to rerun the build method below
-//       // so that the display can reflect the updated values. If we changed
-//       // _counter without calling setState(), then the build method would not be
-//       // called again, and so nothing would appear to happen.
-//       _counter++;
-//     });
-//   }
 
   @override
   Widget build(BuildContext context) {
@@ -100,22 +89,6 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
           ),
-          // DropdownButton<String>(
-          //   value: selectedType,
-          //   onChanged: (String? newType) {
-          //     if (newType != null) {
-          //       setState(() {
-          //         selectedType = newType;
-          //       });
-          //     }
-          //   },
-          //   items: types.map((String item) {
-          //     return DropdownMenuItem<String>(
-          //       value: item,
-          //       child: Text(item),
-          //     );
-          //   }).toList(),
-          // ),
           DropdownButton<String>(
             value: selectedCountry,
             onChanged: (String? newCountry) {
@@ -135,35 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }).toList(),
           ),
           TipAmount(tipAmount: tipAmount)
-        ]
-            // Column(
-            //   // Column is also a layout widget. It takes a list of children and
-            //   // arranges them vertically. By default, it sizes itself to fit its
-            //   // children horizontally, and tries to be as tall as its parent.
-            //   //
-            //   // Column has various properties to control how it sizes itself and
-            //   // how it positions its children. Here we use mainAxisAlignment to
-            //   // center the children vertically; the main axis here is the vertical
-            //   // axis because Columns are vertical (the cross axis would be
-            //   // horizontal).
-            //   //
-            //   // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-            //   // action in the IDE, or press "p" in the console), to see the
-            //   // wireframe for each widget.
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: <Widget>[
-            //     const Text(
-            //       'You have pushed the button this many times:',
-            //     ),
-            //     Text(
-            //       '$_counter',
-            //       style: Theme.of(context).textTheme.headlineMedium,
-            //     //     ),
-            //     //   ],
-            //     // ),
-
-            //     ),
-            ));
+        ]));
   }
 }
 

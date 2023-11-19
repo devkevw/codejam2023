@@ -1,35 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'tips.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'tips.dart';
+import 'globals.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+// Check if location services are enabled
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    print(
+        "Location services are disabled. Some features may not work properly.");
+  }
+
+  // Check and request location permissions
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Handle the case where the user denied location permission
+      print(
+          "Location permissions are denied. Some features may not work properly.");
+    }
+  }
+
+  // Get the current location
+  if (permission == LocationPermission.whileInUse ||
+      permission == LocationPermission.always) {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.medium,
+    );
+
+    // Perform reverse geocoding to get the address information
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+
+    // Extract the country from the placemark
+    geo_country = placemarks.isNotEmpty ? placemarks[0].country ?? '' : '';
+    //print(geo_country);
+  }
+
   runApp(const MyApp());
 }
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-// // Check if location services are enabled
-//   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//   if (!serviceEnabled) {
-//     print("Location services are disabled. Please enable services.");
-//     return;
-//   }
-
-//   // Check and request location permissions
-//   LocationPermission permission = await Geolocator.checkPermission();
-//   if (permission == LocationPermission.denied) {
-//     permission = await Geolocator.requestPermission();
-//     if (permission == LocationPermission.denied) {
-//       // Handle the case where the user denied location permission
-//       print("Location permissions are denied. Exiting the app.");
-//       return;
-//     }
-//   }
-
-//   runApp(const MyApp());
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -58,13 +74,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> countries = tipMap.keys.toList();
+  final List<String> countries = tipMap.keys.toList()..sort();
   String selectedCountry = 'Canada';
   double tipAmount = 0.0;
   double billAmount = 0.0;
   double tipPercentage = 0.15;
   double totalAmount = 0.0;
-  
+
+
+  _MyHomePageState() {
+    // Check if geo_location is in tipMap.keys
+    if (tipMap.keys.contains(geo_country)) {
+      selectedCountry = geo_country;
+      tipPercentage = tipMap[geo_country]!;
+    }
+  }
+
   void _updateTipAmount() {
     setState(() {
       tipAmount = billAmount * tipPercentage;
@@ -149,7 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               margin: EdgeInsets.all(5),
               child: TotalAmount(totalAmount: totalAmount)
-            )
+            ),
+             TipInfo(percentage: tipPercentage, country: selectedCountry)
         ]
        )
       );
@@ -201,6 +227,7 @@ class TipAmount extends StatelessWidget {
   }
 }
 
+// total amount
 class TotalAmount extends StatelessWidget {
   final double totalAmount;
 
@@ -216,5 +243,34 @@ class TotalAmount extends StatelessWidget {
           fontWeight: FontWeight.bold
         )
       );
+  }
+}
+  
+// tip information
+class TipInfo extends StatelessWidget {
+  final double percentage;
+  final String country;
+
+  TipInfo({required this.percentage, required this.country});
+
+  @override
+  Widget build(BuildContext context) {
+    int tipPercentage = (percentage * 100).toInt();
+
+    String tipText;
+    if (percentage == 0) {
+      tipText =
+          'The standard tipping rate in $country is $tipPercentage%. The tip/service is already included in the price.';
+    } else {
+      tipText = 'The standard tipping rate in $country is $tipPercentage%.';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(1.0),
+      child: Text(
+        tipText,
+        style: TextStyle(fontSize: 18.0),
+      ),
+    );
   }
 }

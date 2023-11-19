@@ -12,7 +12,7 @@ void main() async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
   if (!serviceEnabled) {
-    print(
+    print(// prints to console, for debugging
         "Location services are disabled. Some features may not work properly.");
   }
 
@@ -21,7 +21,7 @@ void main() async {
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      print(
+      print(// prints to console, for debugging
           "Location permissions are denied. Some features may not work properly.");
     }
   }
@@ -41,7 +41,7 @@ void main() async {
 
     // Extract the country from the placemark
     geo_country = placemarks.isNotEmpty ? placemarks[0].country ?? '' : '';
-    //print(geo_country);
+    print(geo_country); //prints to console, for debugging
   }
 
   runApp(const MyApp());
@@ -73,10 +73,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<String> countries = tipMap.keys.toList()..sort();
-  String selectedCountry = 'Canada';
+  String selectedCountry = 'China';
   double tipAmount = 0.0;
   double billAmount = 0.0;
-  double tipPercentage = 0.15;
+  double tipPercentage = 0.0;
   double totalAmount = 0.0;
 
   _MyHomePageState() {

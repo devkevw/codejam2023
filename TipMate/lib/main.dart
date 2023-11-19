@@ -211,6 +211,6 @@ class TotalAmount extends StatelessWidget {
       Text(
         'Total Amount: ${totalAmount.toStringAsFixed(2)}',
         style: TextStyle(fontSize: 18.0),
-      ),
+      );
   }
 }

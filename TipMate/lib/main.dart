@@ -110,21 +110,35 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(
             widget.title,
             style: TextStyle(
-              fontWeight: FontWeight.w900)
+              fontWeight: FontWeight.w900,
+              fontSize: 30
+            )
           ),
         ),
         body: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.only(
+                top: 80,
+                bottom: 0,
+                left: 20,
+                right: 20
+                ),
               child: Text(
-                'Welcome to TipMate!\nEnter your bill and the country you are dining in.',
-                textAlign: TextAlign.center)
+                'Welcome to TipMate!\n\nEnter your bill and the country you are dining in.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18
+                )
+              )
             ),
             Container(
-              margin: EdgeInsets.symmetric(
-                vertical: 20, 
-                horizontal: 60),
+              margin: EdgeInsets.only(
+                top: 20, 
+                bottom: 10,
+                left: 60,
+                right: 60
+              ),
             child: CurrencyInputField(
               onChanged: (input) {
                 // This callback is called when the user enters or modifies the text
@@ -138,7 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ),
             Container(
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.only(
+                top: 0, 
+                bottom: 0,
+                left: 60,
+                right: 60
+              ),
               child: DropdownButton<String>(
               value: selectedCountry,
               onChanged: (String? newCountry) {
@@ -159,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(
                       country,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w400
                       ),
                     ),
@@ -168,11 +187,21 @@ class _MyHomePageState extends State<MyHomePage> {
               }).toList(),
             )),
             Container(
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.only(
+                top: 120, 
+                bottom: 0,
+                left: 60,
+                right: 60
+              ),
               child: TipAmount(tipAmount: tipAmount)
               ),
             Container(
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.only(
+                top: 0, 
+                bottom: 0,
+                left: 60,
+                right: 60
+              ),
               child: TotalAmount(totalAmount: totalAmount)
             ),
              TipInfo(percentage: tipPercentage, country: selectedCountry)
@@ -198,12 +227,15 @@ class CurrencyInputField extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: 'Amount',
+        labelStyle: TextStyle(
+          fontSize: 18.0
+        ),
         hintText: '0.00',
         border: UnderlineInputBorder(),
         contentPadding: EdgeInsets.only(bottom: 0),
       ),
       style: TextStyle(
-        fontSize: 20.0,
+        fontSize: 24.0,
         fontWeight: FontWeight.w400
       )
     );
@@ -221,7 +253,7 @@ class TipAmount extends StatelessWidget {
     return Text(
         'Tip: ${tipAmount.toStringAsFixed(2)}',
         style: TextStyle(
-          fontSize: 20.0
+          fontSize: 24.0
           ),
       );
   }
@@ -239,7 +271,7 @@ class TotalAmount extends StatelessWidget {
       Text(
         'Total: ${totalAmount.toStringAsFixed(2)}',
         style: TextStyle(
-          fontSize: 20.0,
+          fontSize: 24.0,
           fontWeight: FontWeight.bold
         )
       );
@@ -260,16 +292,23 @@ class TipInfo extends StatelessWidget {
     String tipText;
     if (percentage == 0) {
       tipText =
-          'The standard tipping rate in $country is $tipPercentage%. The tip/service is already included in the price.';
+          'The recommended tipping rate in $country is $tipPercentage%. The service charge is already included in the price.';
     } else {
-      tipText = 'The standard tipping rate in $country is $tipPercentage%.';
+      tipText = 'The recommended tipping rate in $country is $tipPercentage%.';
     }
-
-    return Padding(
-      padding: const EdgeInsets.all(1.0),
+    return Container(
+      margin: EdgeInsets.only(
+        top: 18, 
+        bottom: 60,
+        left: 20,
+        right: 20
+      ),
       child: Text(
         tipText,
-        style: TextStyle(fontSize: 18.0),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 18.0
+        ),
       ),
     );
   }

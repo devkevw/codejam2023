@@ -103,66 +103,75 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text(widget.title,
-              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30)),
-        ),
-        body: Column(children: [
-          Container(
-              margin: EdgeInsets.only(top: 80, bottom: 0, left: 20, right: 20),
-              child: Text(
-                  'Welcome to TipMate!\n\nEnter your bill and the country you are dining in.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18))),
-          Container(
-              margin: EdgeInsets.only(top: 20, bottom: 10, left: 60, right: 60),
-              child: CurrencyInputField(
-                onChanged: (input) {
-                  setState(() {
-                    billAmount = double.tryParse(input) ??
-                        0.0; // counver user input to double
-                    _updateTipAmount();
-                    _updateTotalAmount();
-                  });
-                },
-              )),
-          Container(
-              margin: EdgeInsets.only(top: 0, bottom: 0, left: 60, right: 60),
-              child: DropdownButton<String>(
-                value: selectedCountry,
-                onChanged: (String? newCountry) {
-                  if (newCountry != null) {
+    return GestureDetector(
+      onTap: () {
+        // Dismiss the keyboard when tapping elsewhere on the screen
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: Text(widget.title,
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30)),
+          ),
+          body: Column(children: [
+            Container(
+                margin:
+                    EdgeInsets.only(top: 80, bottom: 0, left: 20, right: 20),
+                child: Text(
+                    'Welcome to TipMate!\n\nEnter your bill and the country you are dining in.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18))),
+            Container(
+                margin:
+                    EdgeInsets.only(top: 20, bottom: 10, left: 60, right: 60),
+                child: CurrencyInputField(
+                  onChanged: (input) {
                     setState(() {
-                      selectedCountry = newCountry;
-                      tipPercentage = tipMap[newCountry]!;
+                      billAmount = double.tryParse(input) ??
+                          0.0; // counver user input to double
                       _updateTipAmount();
                       _updateTotalAmount();
                     });
-                  }
-                },
-                items: countries.map((String country) {
-                  return DropdownMenuItem<String>(
-                      value: country,
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 0),
-                        child: Text(
-                          country,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w400),
-                        ),
-                      ));
-                }).toList(),
-              )),
-          Container(
-              margin: EdgeInsets.only(top: 120, bottom: 0, left: 60, right: 60),
-              child: TipAmount(tipAmount: tipAmount)),
-          Container(
-              margin: EdgeInsets.only(top: 0, bottom: 0, left: 60, right: 60),
-              child: TotalAmount(totalAmount: totalAmount)),
-          TipInfo(percentage: tipPercentage, country: selectedCountry)
-        ]));
+                  },
+                )),
+            Container(
+                margin: EdgeInsets.only(top: 0, bottom: 0, left: 60, right: 60),
+                child: DropdownButton<String>(
+                  value: selectedCountry,
+                  onChanged: (String? newCountry) {
+                    if (newCountry != null) {
+                      setState(() {
+                        selectedCountry = newCountry;
+                        tipPercentage = tipMap[newCountry]!;
+                        _updateTipAmount();
+                        _updateTotalAmount();
+                      });
+                    }
+                  },
+                  items: countries.map((String country) {
+                    return DropdownMenuItem<String>(
+                        value: country,
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 0),
+                          child: Text(
+                            country,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w400),
+                          ),
+                        ));
+                  }).toList(),
+                )),
+            Container(
+                margin:
+                    EdgeInsets.only(top: 120, bottom: 0, left: 60, right: 60),
+                child: TipAmount(tipAmount: tipAmount)),
+            Container(
+                margin: EdgeInsets.only(top: 0, bottom: 0, left: 60, right: 60),
+                child: TotalAmount(totalAmount: totalAmount)),
+            TipInfo(percentage: tipPercentage, country: selectedCountry)
+          ])),
+    );
   }
 }
 

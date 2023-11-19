@@ -53,12 +53,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TipMate App',
+      title: 'TipMate',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black12),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'TipMate'),
+      home: const MyHomePage(
+        title: 'TipMate'
+      ),
     );
   }
 }
@@ -77,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
   double tipAmount = 0.0;
   double billAmount = 0.0;
   double tipPercentage = 0.15;
+  double totalAmount = 0.0;
+
 
   _MyHomePageState() {
     // Check if geo_location is in tipMap.keys
@@ -92,48 +96,89 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+    void _updateTotalAmount() {
+    setState(() {
+      totalAmount = billAmount + tipAmount;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.amber,
-          title: Text(widget.title),
+          // backgroundColor: Colors.amber,
+          title: Text(
+            widget.title,
+            style: TextStyle(
+              fontWeight: FontWeight.w900)
+          ),
         ),
-        body: Column(children: [
-          SizedBox(
-            height: 30,
-          ),
-          CurrencyInputField(
-            onChanged: (input) {
-              // This callback is called when the user enters or modifies the text
-              // Convert the input text to a double and update the bill amount
-              setState(() {
-                billAmount = double.tryParse(input) ?? 0.0;
-                _updateTipAmount();
-              });
-            },
-          ),
-          DropdownButton<String>(
-            value: selectedCountry,
-            onChanged: (String? newCountry) {
-              if (newCountry != null) {
+        body: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(10),
+              child: Text(
+                'Welcome to TipMate!\nEnter your bill and the country you are dining in.',
+                textAlign: TextAlign.center)
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 20, 
+                horizontal: 60),
+            child: CurrencyInputField(
+              onChanged: (input) {
+                // This callback is called when the user enters or modifies the text
+                // Convert the input text to a double and update the bill amount
                 setState(() {
-                  selectedCountry = newCountry;
-                  tipPercentage = tipMap[newCountry]!;
+                  billAmount = double.tryParse(input) ?? 0.0;
                   _updateTipAmount();
+                  _updateTotalAmount();
                 });
-              }
-            },
-            items: countries.map((String country) {
-              return DropdownMenuItem<String>(
-                value: country,
-                child: Text(country),
-              );
-            }).toList(),
-          ),
-          TipAmount(tipAmount: tipAmount),
-          TipInfo(percentage: tipPercentage, country: selectedCountry)
-        ]));
+              },
+              )
+            ),
+            Container(
+              margin: EdgeInsets.all(5),
+              child: DropdownButton<String>(
+              value: selectedCountry,
+              onChanged: (String? newCountry) {
+                if (newCountry != null) {
+                  setState(() {
+                    selectedCountry = newCountry;
+                    tipPercentage = tipMap[newCountry]!;
+                    _updateTipAmount();
+                    _updateTotalAmount();
+                  });
+                }
+              },
+              items: countries.map((String country) {
+                return DropdownMenuItem<String>(
+                  value: country,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 0),
+                    child: Text(
+                      country,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                  )
+                );
+              }).toList(),
+            )),
+            Container(
+              margin: EdgeInsets.all(5),
+              child: TipAmount(tipAmount: tipAmount)
+              ),
+            Container(
+              margin: EdgeInsets.all(5),
+              child: TotalAmount(totalAmount: totalAmount)
+            ),
+             TipInfo(percentage: tipPercentage, country: selectedCountry)
+        ]
+       )
+      );
   }
 }
 
@@ -150,12 +195,17 @@ class CurrencyInputField extends StatelessWidget {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
       ],
-      onChanged: onChanged, // Pass the onChanged callback to the TextField
+      onChanged: onChanged,
       decoration: InputDecoration(
         labelText: 'Amount',
-        hintText: 'Enter amount',
-        border: OutlineInputBorder(),
+        hintText: '0.00',
+        border: UnderlineInputBorder(),
+        contentPadding: EdgeInsets.only(bottom: 0),
       ),
+      style: TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.w400
+      )
     );
   }
 }
@@ -168,16 +218,34 @@ class TipAmount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-        'Tip Amount: ${tipAmount.toStringAsFixed(2)}',
-        style: TextStyle(fontSize: 18.0),
-      ),
-    );
+    return Text(
+        'Tip: ${tipAmount.toStringAsFixed(2)}',
+        style: TextStyle(
+          fontSize: 20.0
+          ),
+      );
   }
 }
 
+// total amount
+class TotalAmount extends StatelessWidget {
+  final double totalAmount;
+
+  TotalAmount({required this.totalAmount});
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      Text(
+        'Total: ${totalAmount.toStringAsFixed(2)}',
+        style: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold
+        )
+      );
+  }
+}
+  
 // tip information
 class TipInfo extends StatelessWidget {
   final double percentage;

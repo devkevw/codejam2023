@@ -14,6 +14,7 @@ Our project aimed to simplify the tipping process for restaurant-goers abroad by
 
 - Dart
 - Flutter
+- Xcode
 
 ## Demo
 

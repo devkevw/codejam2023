@@ -1,10 +1,10 @@
-# CodeJam 13: Project TipMate
+# CodeJam 13 Hackathon: Project TipMate
 
 ## Team Members
 
 - [Daniel Cho](https://github.com/daniel-heemang)
-- [Kevin Wang](https://github.com/devkevw)
 - [Zuhayr Mahmood](https://github.com/zuhayrmahmood)
+- [Kevin Wang](https://github.com/devkevw)
 
 ## Description
 

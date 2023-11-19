@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'homepage.dart';
+import 'tips.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,7 +42,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   //final List<String> types = ['Restaurant', 'Hotel', 'Taxi'];
-  final List<String> countries = ['Canada', 'USA', 'China'];
+  final List<String> countries = tipMap.keys.toList();
   //String selectedType = 'Restaurant';
   String selectedCountry = 'Canada';
   double tipAmount = 0.0;
@@ -50,11 +50,11 @@ class _MyHomePageState extends State<MyHomePage> {
   double tipPercentage = 0.15;
 
   //adding mapping
-  Map<String, double> tipMap = {
-    'Canada': 0.15,
-    'USA': 0.20,
-    'China': 0.00,
-  };
+  // Map<String, double> tipMap = {
+  //   'Canada': 0.15,
+  //   'USA': 0.20,
+  //   'China': 0.00,
+  // };
 
   void _updateTipAmount() {
     setState(() {

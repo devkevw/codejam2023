@@ -8,7 +8,7 @@
 
 ## Description
 
-Our project aimed to simplify the tipping process for restaurant-goers abroad by developing an app that calculates the appropriate tip amount based on the user's bill and the standard tipping rate of the respective country. Welcome to TipMate!
+Welcome to TipMate! Our project aimed to simplify the tipping process for restaurant-goers abroad by developing an app that calculates the appropriate tip amount based on the user's bill and the standard tipping rate of the respective country.
 
 ## Technologies Used
 

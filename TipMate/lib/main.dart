@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TipMate',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black12),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'TipMate'),
@@ -73,10 +73,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<String> countries = tipMap.keys.toList()..sort();
-  String selectedCountry = 'China';
+  String selectedCountry = 'United States';
   double tipAmount = 0.0;
   double billAmount = 0.0;
-  double tipPercentage = 0.0;
+  double tipPercentage = 0.2;
   double totalAmount = 0.0;
 
   _MyHomePageState() {
@@ -113,7 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             title: Text(widget.title,
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30)),
+            backgroundColor: Colors.white,
           ),
+          backgroundColor: Colors.white,
           body: Column(children: [
             Container(
                 margin:

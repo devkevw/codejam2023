@@ -8,40 +8,40 @@ import 'globals.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-// Check if location services are enabled
+  // check if location services are enabled
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
   if (!serviceEnabled) {
-    print(// prints to console, for debugging
-        "Location services are disabled. Some features may not work properly.");
+    // print(// prints to console, for debugging
+    //     "Location services are disabled. Some features may not work properly.");
   }
 
-  // Check and request location permissions
+  // check and request location permissions
   LocationPermission permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      print(// prints to console, for debugging
-          "Location permissions are denied. Some features may not work properly.");
+      // print(// prints to console, for debugging
+      //     "Location permissions are denied. Some features may not work properly.");
     }
   }
 
-  // Get the current location
+  // get the current location
   if (permission == LocationPermission.whileInUse ||
       permission == LocationPermission.always) {
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.medium,
     );
 
-    // Perform reverse geocoding to get the address information
+    // perform reverse geocoding to get the address information
     List<Placemark> placemarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
     );
 
-    // Extract the country from the placemark
-    geo_country = placemarks.isNotEmpty ? placemarks[0].country ?? '' : '';
-    print(geo_country); //prints to console, for debugging
+    // extract the country from the placemark
+    geoCountry = placemarks.isNotEmpty ? placemarks[0].country ?? '' : '';
+    // print(geoCountry); //prints to console, for debugging
   }
 
   runApp(const MyApp());
@@ -80,10 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
   double totalAmount = 0.0;
 
   _MyHomePageState() {
-    // Check if geo_location is in tipMap.keys
-    if (tipMap.keys.contains(geo_country)) {
-      selectedCountry = geo_country;
-      tipPercentage = tipMap[geo_country]!;
+    // check if geo_location is in tipMap.keys
+    if (tipMap.keys.contains(geoCountry)) {
+      selectedCountry = geoCountry;
+      tipPercentage = tipMap[geoCountry]!;
     }
   }
 
@@ -105,40 +105,42 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Dismiss the keyboard when tapping elsewhere on the screen
+        // dismiss the keyboard when tapping elsewhere on the screen
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(widget.title,
-                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w900, fontSize: 30)),
             backgroundColor: Colors.white,
           ),
           backgroundColor: Colors.white,
           body: Column(children: [
             Container(
-                margin:
-                    EdgeInsets.only(top: 80, bottom: 0, left: 20, right: 20),
-                child: Text(
+                margin: const EdgeInsets.only(
+                    top: 80, bottom: 0, left: 20, right: 20),
+                child: const Text(
                     'Welcome to TipMate!\n\nEnter your bill and the country you are dining in.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 18))),
             Container(
-                margin:
-                    EdgeInsets.only(top: 20, bottom: 10, left: 60, right: 60),
+                margin: const EdgeInsets.only(
+                    top: 20, bottom: 10, left: 60, right: 60),
                 child: CurrencyInputField(
                   onChanged: (input) {
                     setState(() {
                       billAmount = double.tryParse(input) ??
-                          0.0; // counver user input to double
+                          0.0; // counvert user input to double
                       _updateTipAmount();
                       _updateTotalAmount();
                     });
                   },
                 )),
             Container(
-                margin: EdgeInsets.only(top: 0, bottom: 0, left: 60, right: 60),
+                margin: const EdgeInsets.only(
+                    top: 0, bottom: 0, left: 60, right: 60),
                 child: DropdownButton<String>(
                   value: selectedCountry,
                   onChanged: (String? newCountry) {
@@ -155,21 +157,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     return DropdownMenuItem<String>(
                         value: country,
                         child: Padding(
-                          padding: EdgeInsets.only(bottom: 0),
+                          padding: const EdgeInsets.only(bottom: 0),
                           child: Text(
                             country,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w400),
                           ),
                         ));
                   }).toList(),
                 )),
             Container(
-                margin:
-                    EdgeInsets.only(top: 120, bottom: 0, left: 60, right: 60),
+                margin: const EdgeInsets.only(
+                    top: 120, bottom: 0, left: 60, right: 60),
                 child: TipAmount(tipAmount: tipAmount)),
             Container(
-                margin: EdgeInsets.only(top: 0, bottom: 0, left: 60, right: 60),
+                margin: const EdgeInsets.only(
+                    top: 0, bottom: 0, left: 60, right: 60),
                 child: TotalAmount(totalAmount: totalAmount)),
             TipInfo(percentage: tipPercentage, country: selectedCountry)
           ])),
@@ -181,24 +184,24 @@ class _MyHomePageState extends State<MyHomePage> {
 class CurrencyInputField extends StatelessWidget {
   final Function(String) onChanged;
 
-  CurrencyInputField({required this.onChanged});
+  const CurrencyInputField({super.key, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
         ],
         onChanged: onChanged,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'Amount',
           labelStyle: TextStyle(fontSize: 18.0),
           hintText: '0.00',
           border: UnderlineInputBorder(),
           contentPadding: EdgeInsets.only(bottom: 0),
         ),
-        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400));
+        style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.w400));
   }
 }
 
@@ -206,13 +209,13 @@ class CurrencyInputField extends StatelessWidget {
 class TipAmount extends StatelessWidget {
   final double tipAmount;
 
-  TipAmount({required this.tipAmount});
+  const TipAmount({super.key, required this.tipAmount});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       'Tip: ${tipAmount.toStringAsFixed(2)}',
-      style: TextStyle(fontSize: 24.0),
+      style: const TextStyle(fontSize: 24.0),
     );
   }
 }
@@ -221,12 +224,12 @@ class TipAmount extends StatelessWidget {
 class TotalAmount extends StatelessWidget {
   final double totalAmount;
 
-  TotalAmount({required this.totalAmount});
+  const TotalAmount({super.key, required this.totalAmount});
 
   @override
   Widget build(BuildContext context) {
     return Text('Total: ${totalAmount.toStringAsFixed(2)}',
-        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold));
+        style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold));
   }
 }
 
@@ -235,7 +238,7 @@ class TipInfo extends StatelessWidget {
   final double percentage;
   final String country;
 
-  TipInfo({required this.percentage, required this.country});
+  const TipInfo({super.key, required this.percentage, required this.country});
 
   @override
   Widget build(BuildContext context) {
@@ -249,11 +252,11 @@ class TipInfo extends StatelessWidget {
       tipText = 'The recommended tipping rate in $country is $tipPercentage%.';
     }
     return Container(
-      margin: EdgeInsets.only(top: 18, bottom: 60, left: 20, right: 20),
+      margin: const EdgeInsets.only(top: 18, bottom: 60, left: 20, right: 20),
       child: Text(
         tipText,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18.0),
+        style: const TextStyle(fontSize: 18.0),
       ),
     );
   }

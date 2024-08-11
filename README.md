@@ -18,4 +18,4 @@ Welcome to TipMate! Our project aimed to simplify the tipping process for restau
 
 ## Demo
 
-Check out our [Devpost](https://devpost.com/software/tipmate-app?ref_content=user-portfolio&ref_feature=in_progress)!
+Check out our [Devpost](https://devpost.com/software/tipmate-app)!
